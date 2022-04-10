@@ -36,6 +36,16 @@ io.on('connection', (socket: Socket) => {
       list: connectedUsers,
     });
   });
+
+  socket.on('send-msg', txt => {
+    const obj = {
+      userName: socket.userName,
+      message: txt,
+    };
+
+    // socket.emit('show-msg', obj);
+    socket.broadcast.emit('show-msg', obj);
+  });
 });
 
 server.listen(3333, () => {

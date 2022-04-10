@@ -26,6 +26,7 @@ function renderUserList() {
   });
 };
 
+// Add message on screen
 function addMessage(type, user, msg) {
   let ul = document.querySelector('.chatList');
 
@@ -34,9 +35,16 @@ function addMessage(type, user, msg) {
       ul.innerHTML += '<li class="m-status">'+msg+'</li>';
     break;
     case 'msg':
-      ul.innerHTML += '<li class="m-text"><span>'+user+'</span> '+msg+'</li>';
+      if(userName === user){
+        ul.innerHTML += '<li class="m-txt"><span class="me">'+user+'</span> '+msg+'</li>';
+      }else{
+        ul.innerHTML += '<li class="m-txt"><span>'+user+'</span> '+msg+'</li>';
+      }
     break;
   }
+
+
+  ul.scrollTop = ul.scrollHeight;
 
 
 };
@@ -54,6 +62,20 @@ loginInput.addEventListener('keyup', (e) => {
     }
   }
 });
+
+textInput.addEventListener('keyup', (e) => {
+  if(e.keyCode === 13) {
+    let txt = textInput.value.trim();
+    textInput.value = '';
+
+    if(txt !== '') {
+      addMessage('msg', userName, txt);
+      socket.emit('send-msg', txt);
+    }
+  }
+})
+
+
 
 // Quando o servidor emit um user-ok nos renderizamos a tela de chat e a lista de usuarios
 socket.on('user-ok', (list) => {
@@ -81,4 +103,26 @@ socket.on('list-update', (data) => {
 
   userList = data.list;
   renderUserList();
-})
+});
+
+socket.on('show-msg', (data) => {
+  addMessage('msg', data.userName, data.message);
+});
+
+socket.on('disconnect', () => {
+  addMessage('status', null, 'Você foi desconectado!');
+  userList = [];
+  renderUserList();
+});
+
+socket.on('reconnect_error', () => {
+  addMessage('status', null, 'Tentando reconectar...');
+});
+socket.on('reconnect', () => {
+  addMessage('status', null, 'Reconnectado!');
+
+  if(userName !== ''){
+    socket.emit('join-request', userName);
+  }
+
+});
