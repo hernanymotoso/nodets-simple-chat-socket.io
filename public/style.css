@@ -17,7 +17,7 @@
 }
 
 #loginPage {
-  display: none;
+  display: flex;
   background-color: #fff;
 
 }
@@ -40,7 +40,7 @@
 
 
 #chatPage {
-  display: flex;
+  display: none;
 }
 
 .chatArea {
