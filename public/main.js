@@ -1,4 +1,4 @@
-const socket = io();
+const socket = io('/', {forceNew: true});
 
 socket.on('connect', () => {
   console.log('connect client');
@@ -115,11 +115,12 @@ socket.on('disconnect', () => {
   renderUserList();
 });
 
-socket.on('reconnect_error', () => {
+socket.on('connect_error', () => {
   addMessage('status', null, 'Tentando reconectar...');
 });
-socket.on('reconnect', () => {
-  addMessage('status', null, 'Reconnectado!');
+
+socket.io.on('reconnect', () => {
+  addMessage('status', null, 'Reconnectado...');
 
   if(userName !== ''){
     socket.emit('join-request', userName);

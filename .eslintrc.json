@@ -32,6 +32,7 @@
         }
       ],
     "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
+    "no-param-reassign": "off",
     //"@typescript-eslint/interface-name-prefix": ["error", {"prefixWithI": "always"}], not working
     "@typescript-eslint/no-unused-vars": ["error", {
         "argsIgnorePattern": "_"
