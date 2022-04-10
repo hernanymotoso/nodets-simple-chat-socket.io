@@ -120,7 +120,7 @@ socket.on('connect_error', () => {
 });
 
 socket.io.on('reconnect', () => {
-  addMessage('status', null, 'Reconnectado...');
+  addMessage('status', null, 'Reconnectando...');
 
   if(userName !== ''){
     socket.emit('join-request', userName);
